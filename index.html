@@ -172,7 +172,10 @@ function layoutMasonry() {
   cards.forEach(card => {
     const minCol = colHeights.indexOf(Math.min(...colHeights));
 
-    const visualOffset = -8;
+    const visualOffset =
+      window.innerWidth < 500 ? -6 :
+      window.innerWidth < 900 ? -8 : -10;
+
     const x = minCol * (colWidth + gap) + visualOffset;
     const y = colHeights[minCol];
 
