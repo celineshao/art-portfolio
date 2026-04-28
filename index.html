@@ -172,7 +172,8 @@ function layoutMasonry() {
   cards.forEach(card => {
     const minCol = colHeights.indexOf(Math.min(...colHeights));
 
-    const x = minCol * (colWidth + gap);
+    const visualOffset = -8;
+    const x = minCol * (colWidth + gap) + visualOffset;
     const y = colHeights[minCol];
 
     card.style.transform = `translate(${x}px, ${y}px)`;
