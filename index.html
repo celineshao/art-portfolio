@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Celine Shao — Art Portfolio</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #fdfcff;
+      --text: #222;
+      --muted: #777;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      text-align: center;
+      padding: 100px 20px 50px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 72px;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      margin-top: 12px;
+      color: var(--muted);
+    }
+
+    .gallery {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+
+    .card {
+      position: absolute;
+      border-radius: 18px;
+      overflow: hidden;
+      background: white;
+      cursor: pointer;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    }
+
+    .img-wrap img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.08);
+    }
+
+    .caption {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 14px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+      color: white;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .card:hover .caption {
+      opacity: 1;
+    }
+
+    .card.active .caption {
+      opacity: 1;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+    }
+
+    .lightbox:target {
+      display: flex;
+    }
+
+    .close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      font-size: 30px;
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {}
+    @media (max-width: 500px) {
+      .gallery { padding: 15px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Celine Shao</h1>
+  <p class="subtitle">ILLUSTRATION · WAX COLOUR PENCILS</p>
+</header>
+
+<div class="gallery" id="gallery">
+
+  <a href="#img1" class="card"><div class="img-wrap"><img src="artwork/flower-girl.jpg"><div class="caption">Flower Girl</div></div></a>
+  <a href="#img2" class="card"><div class="img-wrap"><img src="artwork/blueberry.jpg"><div class="caption">Blueberry Dessert</div></div></a>
+  <a href="#img7" class="card"><div class="img-wrap"><img src="artwork/ring.jpg"><div class="caption">Shiny Ring</div></div></a>
+  <a href="#img3" class="card"><div class="img-wrap"><img src="artwork/bird-girl.jpg"><div class="caption">Bird Girl</div></div></a>
+  <a href="#img4" class="card"><div class="img-wrap"><img src="artwork/rose.jpg"><div class="caption">Rose</div></div></a>
+  <a href="#img5" class="card"><div class="img-wrap"><img src="artwork/frog.jpg"><div class="caption">Glass Frog</div></div></a>
+  <a href="#img6" class="card"><div class="img-wrap"><img src="artwork/jewel-girl.jpg"><div class="caption">Jewel Girl</div></div></a>
+  <a href="#img8" class="card"><div class="img-wrap"><img src="artwork/ballet.jpg"><div class="caption">Pointe Shoes</div></div></a>
+  <a href="#img9" class="card"><div class="img-wrap"><img src="artwork/mando.jpg"><div class="caption">Mandalorian</div></div></a>
+
+</div>
+
+<!-- LIGHTBOX -->
+<div id="img1" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/flower-girl.jpg"></div>
+<div id="img2" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/blueberry.jpg"></div>
+<div id="img3" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/bird-girl.jpg"></div>
+<div id="img4" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/rose.jpg"></div>
+<div id="img5" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/frog.jpg"></div>
+<div id="img6" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/jewel-girl.jpg"></div>
+<div id="img7" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/ring.jpg"></div>
+<div id="img8" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/ballet.jpg"></div>
+<div id="img9" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/mando.jpg"></div>
+
+<script>
+function layoutMasonry() {
+  const container = document.getElementById("gallery");
+  const cards = Array.from(document.querySelectorAll(".card"));
+
+  const gap = 20;
+  const sidePadding = 10; // 👈 controls left/right spacing visually
+
+  const cols =
+    window.innerWidth < 500 ? 1 :
+    window.innerWidth < 900 ? 2 : 3;
+
+  const containerWidth = container.clientWidth - sidePadding * 2;
+
+  const colWidth = (containerWidth - gap * (cols - 1)) / cols;
+
+  const colHeights = Array(cols).fill(0);
+
+  cards.forEach(card => {
+    const minCol = colHeights.indexOf(Math.min(...colHeights));
+
+    const x = sidePadding + minCol * (colWidth + gap);
+    const y = colHeights[minCol];
+
+    card.style.transform = `translate(${x}px, ${y}px)`;
+    card.style.width = `${colWidth}px`;
+
+    colHeights[minCol] += card.offsetHeight + gap;
+  });
+
+  container.style.height = Math.max(...colHeights) + "px";
+}
+
+window.addEventListener("load", layoutMasonry);
+
+let resizeTimeout;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(layoutMasonry, 100);
+});
+
+/* tap toggle */
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("click", () => {
+    card.classList.toggle("active");
+  });
+});
+
+/* clear captions */
+function clearCaptions() {
+  document.querySelectorAll(".card").forEach(card => {
+    card.classList.remove("active");
+  });
+}
+
+document.querySelectorAll(".close").forEach(btn => {
+  btn.addEventListener("click", clearCaptions);
+});
+
+document.querySelectorAll(".lightbox").forEach(lb => {
+  lb.addEventListener("click", clearCaptions);
+});
+</script>
+
+</body>
+</html>
