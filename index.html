@@ -38,74 +38,54 @@
       color: var(--muted);
     }
 
-    /* ===== MASONRY CONTAINER ===== */
     .gallery {
       position: relative;
       max-width: 1100px;
-      margin: auto;
-      padding: 30px;
+      margin: 0 auto;
+      padding: 20px 10px;
     }
 
-    /* ===== CARD ===== */
     .card {
       position: absolute;
-      width: calc((100% - 40px) / 3);
       border-radius: 18px;
       overflow: hidden;
       background: white;
       cursor: pointer;
-
       box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-
-      transform: translateZ(0);
-      backface-visibility: hidden;
-    }
-
-    .img-wrap {
-      position: relative;
-      overflow: hidden;
     }
 
     .img-wrap img {
       width: 100%;
       display: block;
-      transform: scale(1);
       transition: transform 0.4s ease;
     }
 
-    /* desktop hover zoom */
     .card:hover img {
       transform: scale(1.08);
     }
 
-    /* ===== CAPTION ===== */
     .caption {
       position: absolute;
       inset: 0;
       display: flex;
       align-items: flex-end;
       padding: 14px 16px;
-
       background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
       color: white;
       font-size: 14px;
-
       opacity: 0;
       transition: opacity 0.25s ease;
       pointer-events: none;
     }
 
-    /* desktop hover caption */
     .card:hover .caption {
       opacity: 1;
     }
 
-    /* mobile tap caption */
     .card.active .caption {
       opacity: 1;
     }
 
-    /* ===== LIGHTBOX ===== */
     .lightbox {
       display: none;
       position: fixed;
@@ -135,21 +115,9 @@
       text-decoration: none;
     }
 
-    /* ===== RESPONSIVE WIDTH ===== */
-    @media (max-width: 900px) {
-      .card {
-        width: calc((100% - 20px) / 2);
-      }
-    }
-
+    @media (max-width: 900px) {}
     @media (max-width: 500px) {
-      .card {
-        width: 100%;
-      }
-
-      .gallery {
-        padding: 15px;
-      }
+      .gallery { padding: 15px; }
     }
   </style>
 </head>
@@ -176,15 +144,15 @@
 </div>
 
 <!-- LIGHTBOX -->
-<div id="img1" class="lightbox"><a href="#" class="close">×</a><img src="artwork/flower-girl.jpg"></div>
-<div id="img2" class="lightbox"><a href="#" class="close">×</a><img src="artwork/blueberry.jpg"></div>
-<div id="img3" class="lightbox"><a href="#" class="close">×</a><img src="artwork/bird-girl.jpg"></div>
-<div id="img4" class="lightbox"><a href="#" class="close">×</a><img src="artwork/rose.jpg"></div>
-<div id="img5" class="lightbox"><a href="#" class="close">×</a><img src="artwork/frog.jpg"></div>
-<div id="img6" class="lightbox"><a href="#" class="close">×</a><img src="artwork/jewel-girl.jpg"></div>
-<div id="img7" class="lightbox"><a href="#" class="close">×</a><img src="artwork/ring.jpg"></div>
-<div id="img8" class="lightbox"><a href="#" class="close">×</a><img src="artwork/ballet.jpg"></div>
-<div id="img9" class="lightbox"><a href="#" class="close">×</a><img src="artwork/mando.jpg"></div>
+<div id="img1" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/flower-girl.jpg"></div>
+<div id="img2" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/blueberry.jpg"></div>
+<div id="img3" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/bird-girl.jpg"></div>
+<div id="img4" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/rose.jpg"></div>
+<div id="img5" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/frog.jpg"></div>
+<div id="img6" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/jewel-girl.jpg"></div>
+<div id="img7" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/ring.jpg"></div>
+<div id="img8" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/ballet.jpg"></div>
+<div id="img9" class="lightbox"><a href="#!" class="close">×</a><img src="artwork/mando.jpg"></div>
 
 <script>
 function layoutMasonry() {
@@ -196,17 +164,19 @@ function layoutMasonry() {
     window.innerWidth < 500 ? 1 :
     window.innerWidth < 900 ? 2 : 3;
 
+  const containerWidth = container.clientWidth;
+  const colWidth = (containerWidth - gap * (cols - 1)) / cols;
+
   const colHeights = Array(cols).fill(0);
-  const colWidth = container.clientWidth / cols;
 
   cards.forEach(card => {
     const minCol = colHeights.indexOf(Math.min(...colHeights));
 
-    const x = minCol * colWidth;
+    const x = minCol * (colWidth + gap);
     const y = colHeights[minCol];
 
     card.style.transform = `translate(${x}px, ${y}px)`;
-    card.style.width = `${colWidth - gap}px`;
+    card.style.width = `${colWidth}px`;
 
     colHeights[minCol] += card.offsetHeight + gap;
   });
@@ -222,11 +192,26 @@ window.addEventListener("resize", () => {
   resizeTimeout = setTimeout(layoutMasonry, 100);
 });
 
-/* mobile tap to show caption */
+/* tap toggle */
 document.querySelectorAll(".card").forEach(card => {
   card.addEventListener("click", () => {
     card.classList.toggle("active");
   });
+});
+
+/* clear captions */
+function clearCaptions() {
+  document.querySelectorAll(".card").forEach(card => {
+    card.classList.remove("active");
+  });
+}
+
+document.querySelectorAll(".close").forEach(btn => {
+  btn.addEventListener("click", clearCaptions);
+});
+
+document.querySelectorAll(".lightbox").forEach(lb => {
+  lb.addEventListener("click", clearCaptions);
 });
 </script>
 
